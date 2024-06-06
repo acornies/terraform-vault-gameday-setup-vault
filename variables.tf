@@ -32,4 +32,5 @@ variable "vault_address" {
 
 variable "vault_token" {
   type = string
+  sensitive = true
 }
