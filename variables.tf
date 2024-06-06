@@ -21,15 +21,15 @@ variable "team_name" {
     error_message = "Team name must only contain alphanumeric characters, dashes, and underscores."
   }
 }
-# move to data in module consumption
-# variable "participants" {
-#     type = map(any)
-#     validation {
-#         condition     = can(alltrue([for value in values(var.participants) : contains(keys(value), "team")]))
-#         error_message = "Each participant must have a 'team' key."
-#     }
-# }
 
 variable "github_organization" {
+  type = string
+}
+
+variable "vault_address" {
+  type = string
+}
+
+variable "vault_token" {
   type = string
 }
