@@ -1,6 +1,6 @@
 terraform {
   required_providers {
-    hcp = {
+    vault = {
       source  = "hashicorp/vault"
       version = "4.2.0"
     }
@@ -40,7 +40,7 @@ resource "vault_github_team" "participant" {
 
 # Create the secrets v2 engine in the particpant namespace under path "kv"
 resource "vault_mount" "participant" {
-  namespace = vault_namespace.participants.path_fq
+  namespace = vault_namespace.participant.path_fq
   path      = "kv"
   type      = "kv"
   options = {

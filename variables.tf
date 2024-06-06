@@ -10,7 +10,7 @@ variable "namespace_name" {
   type = string
   validation {
     condition     = can(regex("^[-a-zA-Z0-9_]+$", var.namespace_name))
-    error_message = "Event name must only contain alphanumeric characters, dashes, and underscores."
+    error_message = "Namespace name must only contain alphanumeric characters, dashes, and underscores."
   }
 }
 
@@ -18,7 +18,7 @@ variable "team_name" {
   type = string
   validation {
     condition     = can(regex("^[-a-zA-Z0-9_]+$", var.team_name))
-    error_message = "Event name must only contain alphanumeric characters, dashes, and underscores."
+    error_message = "Team name must only contain alphanumeric characters, dashes, and underscores."
   }
 }
 # move to data in module consumption
