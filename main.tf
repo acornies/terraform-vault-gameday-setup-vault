@@ -14,14 +14,21 @@ provider "vault" {
   skip_child_token = true
 }
 
-# Create the participant namespace
-resource "vault_namespace" "participant" {
-  path = var.namespace_name
+# Create namespace for the facilitator
+resource "vault_namespace" "facilitator" {
+  path = "${var.event_name}-facilitator"
 }
 
-# Create a "sudo" policy in the namespace
-resource "vault_policy" "participant" {
-  namespace = vault_namespace.participant.path_fq
+# Create the participant namespaces from the map defined in variables.tf
+resource "vault_namespace" "participants" {
+  for_each = var.participants
+  path     = each.key
+}
+
+# Create a "sudo" policy in each namespace
+resource "vault_policy" "participants" {
+  for_each  = var.participants
+  namespace = vault_namespace.participants[each.key].path_fq
   name      = "admin"
   policy    = <<EOT
 path "*" {
@@ -30,24 +37,27 @@ path "*" {
 EOT
 }
 
-# Create a GitHub auth backend in the namespace under path "github"
-resource "vault_github_auth_backend" "participant" {
-  namespace    = vault_namespace.participant.path_fq
+# Create a GitHub auth backend in each namespace under path "github"
+resource "vault_github_auth_backend" "participants" {
+  for_each     = var.participants
+  namespace    = vault_namespace.participants[each.key].path_fq
   organization = var.github_organization
 }
 
-# Use the team name variable to assign the appropriate GitHub
-# team for the GitHub auth backend for the namespace, assign it the "admin" policy
-resource "vault_github_team" "participant" {
-  namespace = vault_namespace.participant.path_fq
-  backend   = vault_github_auth_backend.participant.id
-  team      = var.team_name
+# Use the "team" property in the participants variable to assign the appropriate GitHub
+# team for the GitHub auth backend for each namespace, assign it the "dev" policy
+resource "vault_github_team" "participants" {
+  for_each  = var.participants
+  namespace = vault_namespace.participants[each.key].path_fq
+  backend   = vault_github_auth_backend.participants[each.key].id
+  team      = each.value.team
   policies  = ["admin"]
 }
 
-# Create the secrets v2 engine in the particpant namespace under path "kv"
-resource "vault_mount" "participant" {
-  namespace = vault_namespace.participant.path_fq
+# Create the secrets v2 engine in each particpant namespace under path "kv"
+resource "vault_mount" "participants" {
+  for_each  = var.participants
+  namespace = vault_namespace.participants[each.key].path_fq
   path      = "kv"
   type      = "kv"
   options = {

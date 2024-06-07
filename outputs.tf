@@ -1,3 +1,3 @@
-output "vault_namespace" {
-  value = vault_namespace.participant.path_fq
+output "vault_namespaces" {
+  value = vault_namespace.participants[*].path_fq
 }
