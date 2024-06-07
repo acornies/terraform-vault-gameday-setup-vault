@@ -1,3 +1,6 @@
 output "vault_namespaces" {
-  value = vault_namespace.participants[*].path_fq
+    value = {
+        facilitator = vault_namespace.facilitator.path_fq
+        participants = { for key, value in var.participants : key => vault_namespace.participants[key].path_fq }
+    }
 }
