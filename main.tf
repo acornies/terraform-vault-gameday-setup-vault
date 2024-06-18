@@ -8,9 +8,9 @@ terraform {
 }
 
 provider "vault" {
-  address = var.vault_address
-  token   = var.vault_token
-  namespace = "admin" #TODO for non-hcp vault clusters
+  address          = var.vault_address
+  token            = var.vault_token
+  namespace        = "admin" #TODO for non-hcp vault clusters
   skip_child_token = true
 }
 

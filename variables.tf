@@ -23,6 +23,6 @@ variable "vault_address" {
 }
 
 variable "vault_token" {
-  type = string
+  type      = string
   sensitive = true
 }
