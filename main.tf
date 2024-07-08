@@ -50,7 +50,7 @@ resource "vault_github_team" "participants" {
   for_each  = { for k, v in var.participants : k => v.team if var.use_teams }
   namespace = vault_namespace.participants[each.key].path_fq
   backend   = vault_github_auth_backend.participants[each.key].id
-  team      = each.value.team
+  team      = each.value
   policies  = ["admin"]
 }
 
@@ -60,7 +60,7 @@ resource "vault_github_user" "participants" {
   for_each  = { for k, v in var.participants : k => v.team if !var.use_teams }
   namespace = vault_namespace.participants[each.key].path_fq
   backend   = vault_github_auth_backend.participants[each.key].id
-  user      = each.value.team
+  user      = each.value
   policies  = ["admin"]
 }
 
