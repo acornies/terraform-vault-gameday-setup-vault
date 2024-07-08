@@ -14,6 +14,12 @@ variable "participants" {
   }
 }
 
+variable "use_teams" {
+  type        = bool
+  default     = false
+  description = "Use GitHub teams to assign policies to participants."
+}
+
 variable "github_organization" {
   type = string
 }
